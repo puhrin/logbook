@@ -1,11 +1,15 @@
+import model
+import view
 import tkinter
 
-import view.view
-import model.model   
+import os # delete
 
 if __name__ == "__main__":
 
     root = tkinter.Tk()
+
+    root.title('Setra s.r.o.')
+    root.config(background='orange')
 
     root.state('zoomed') # fullscreen
 
@@ -15,4 +19,7 @@ if __name__ == "__main__":
     try:
         root.mainloop()
     finally:
+
+        print("Databáza je uložená tu:", os.path.abspath('vehicles.db')) # delete
+
         main_model.exit()
