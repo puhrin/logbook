@@ -25,7 +25,6 @@ Príklad:
   Najazdené km: 178  
   Tachometer pred jazdou: 85 200  
   Tachometer po jazde: 85 378  
-# GPT end
 
 
 # AUDIT SK begin  
@@ -40,4 +39,4 @@ Tie osobitné záznamy obsahujú najmä:
   účel jazdy preukazujúci použitie osobného motorového vozidla na podnikanie,  
   miesto začatia jazdy a miesto skončenia jazdy,  
   počet najazdených kilometrov za každú jazdu, stav počítadla kilometrov pred každou jazdou a po každej jazde,  
-# AUDIT SK end
+
