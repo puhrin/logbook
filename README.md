@@ -1,4 +1,4 @@
-# GPT begin
+# GPT  
 "Novela zákona o DPH účinná od 1. 1. 2026 stanovuje, že ak chce podnikateľ uplatniť 100 % odpočet DPH na osobné motorové vozidlo (ďalej „PMV“) používané výlučne na podnikanie, musí viesť elektronickú evidenciu o jeho použití. "  
 Čo musí evidencia obsahovať? Podľa § 85n zákona o DPH je potrebné viesť pre každé osobné vozidlo samostatne:  
   VIN vozidla, evidenčné číslo (EČV), názov a typ vozidla.  
@@ -27,7 +27,7 @@ Príklad:
   Tachometer po jazde: 85 378  
 
 
-# AUDIT SK begin  
+# AUDIT   
 Tie osobitné záznamy obsahujú najmä:  
   identifikačné číslo osobného motorového vozidla VIN,  
   evidenčné číslo osobného motorového vozidla, názov a typ osobného motorového vozidla,  
