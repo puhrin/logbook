@@ -44,6 +44,13 @@ class main_logic():
                             )
                             """)
         
+        
+        # self.cursor.execute("""
+        #                     CREATE TABLE IF NOT EXISTS expenses
+        #                     id INTEGER PRIMARY KEY AUTOINCREMENT
+        #                     """)
+        
+        
         self.connect.commit()
         
 
@@ -91,7 +98,7 @@ class main_logic():
 
             km_before = last_trip[10] # km_after
 
-        distance = dictionary['km_after'] - km_before 
+        km_after = km_before + dictionary['distance']
 
         self.cursor.execute(
             "INSERT INTO trips (vehicle_id, driver_name, date, time_start, time_end, purpose, location_start, location_end, km_before, km_after, distance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
@@ -104,8 +111,8 @@ class main_logic():
              dictionary['location_start'], 
              dictionary['location_end'], 
              km_before, 
-             dictionary['km_after'], 
-             distance))
+             km_after, 
+             dictionary['distance']))
 
         self.connect.commit()
 
@@ -140,17 +147,31 @@ class main_logic():
         return self.cursor.fetchall()
     
     
-    def modify(self, id, input_value): # UNUSED
+    def modify_trip(self, dictionary):
 
-        self.cursor.execute('SELECT km_end FROM data WHERE id = ?', (id,))
-        temp = self.cursor.fetchone()
-        input_value += int(temp[0])
+        # self.entry_add_right = {
+        #     'vehicle_id' :     None, #0
+        #     'driver_name' :    None, #1
+        #     'date' :           None, #2
+        #     'time_start' :     None, #3
+        #     'time_end' :       None, #4
+        #     'purpose' :        None, #5
+        #     'location_start' : None, #6
+        #     'location_end' :   None, #7
+        #     'km_before' :      None, #8
+        #     'km_after' :       None, #9
+        #     'distance' :       None  #10
+        # }
 
-        self.cursor.execute('UPDATE data SET km_end = ? WHERE id = ?', (input_value, id,))
+        return 1
+
+        self.cursor.execute('SELECT * FROM trips WHERE vehicle_id = ?', (id,))
+        
+
 
         self.connect.commit()
 
-        return input_value
+        return 
     
     def exit(self):
 
