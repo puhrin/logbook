@@ -49,7 +49,7 @@ class main_window():
             x=0,
             y=0,
             width=self.screen_width * 0.3,
-            height=self.screen_height * 0.8
+            height=self.screen_height * 0.747        ## fix
          )
         
     def initialize_canvas_right(self):
@@ -155,12 +155,12 @@ class main_window():
 
             text = self.entry_texts_left[name]
 
-            entry = tkinter.Entry(self.root, background='black', foreground='orange', font=('Arial', 20), insertbackground='orange')
+            entry = tkinter.Entry(self.root, background='black', foreground='orange', font=('Arial', 16), insertbackground='orange')
 
             if i < 4:
-                entry.place(x=2, y=self.screen_height * 0.8 + 2 + i*self.screen_height*0.024, width= self.screen_width * 0.3 - 2)
+                entry.place(x=2, y=self.screen_height * 0.75 + i*self.screen_height*0.03, width= self.screen_width * 0.2975) #fix
             else:
-                entry.place(x=2, y=self.screen_height * 0.8 + 2 + i*self.screen_height*0.024, width= self.screen_width * 0.25)
+                entry.place(x=2, y=self.screen_height * 0.75 + i*self.screen_height*0.03, width= self.screen_width * 0.25) #fix
 
             entry.insert(0, text)
 
@@ -176,9 +176,9 @@ class main_window():
         self.button_add_vehicle = tkinter.Button(background='green', text='Pridaj', font=('Arial', 20), foreground='black')
         self.button_add_vehicle.place(
             x=self.screen_width * 0.25 + 2, 
-            y=self.screen_height * 0.8 + self.screen_height * 0.024 * 4 + 2,  
-            width=int(self.screen_width * 0.05 - 2), 
-            height=int(self.screen_height*0.05) - 2)
+            y=self.screen_height * 0.75 + self.screen_height * 0.03 * 4 ,  
+            width=int(self.screen_width * 0.048), 
+            height=int(self.screen_height*0.056))
         self.button_add_vehicle.bind('<ButtonRelease-1>', self.button_release)
 
         return 1
@@ -270,7 +270,7 @@ class main_window():
                 justify=tkinter.LEFT 
             )
 
-            button.id = vehicle_id
+            button.id = id
 
             button.bind('<ButtonRelease-1>', self.button_trips_modify)
 
@@ -289,11 +289,11 @@ class main_window():
     def button_trips_modify(self, event):
 
         self.entry_modify_right = []
+        
+        self.button_trips_modify_id = event.widget.id
 
         self.modify_window = tkinter.Toplevel(self.root)
         
-
-        id = event.widget.id
 
         for i in range(len(self.entry_names_right)):
 
@@ -302,6 +302,8 @@ class main_window():
             text = self.entry_texts_right[name]
 
             entry = tkinter.Entry(self.modify_window, background='black', foreground='orange', font=('Arial', 20), insertbackground='orange')
+            
+            
 
             entry.pack()
 
@@ -312,7 +314,8 @@ class main_window():
 
             self.entry_modify_right.append(entry)
         
-        self.button_modify_trip = tkinter.Button(self.modify_window, background='green', text='Uprav', font=('Arial', 20), foreground='black', command=self.button_release)
+        self.button_modify_trip = tkinter.Button(self.modify_window, background='green', text='Uprav', font=('Arial', 20), foreground='black')
+        self.button_modify_trip.bind('<ButtonRelease-1>', self.button_release)
         self.button_modify_trip.pack(fill='x')
 
         return 1
@@ -323,17 +326,18 @@ class main_window():
         self.entry_right = []
 
         self.entry_add_right = {
-            'vehicle_id' :     None, #0
-            'driver_name' :    None, #1
-            'date' :           None, #2
-            'time_start' :     None, #3
-            'time_end' :       None, #4
-            'purpose' :        None, #5
-            'location_start' : None, #6
-            'location_end' :   None, #7
-            'km_before' :      None, #8
-            'km_after' :       None, #9
-            'distance' :       None  #10
+            'id':              None, #0
+            'vehicle_id' :     None, #1
+            'driver_name' :    None, #2
+            'date' :           None, #3
+            'time_start' :     None, #4
+            'time_end' :       None, #5
+            'purpose' :        None, #6
+            'location_start' : None, #7
+            'location_end' :   None, #8
+            'km_before' :      None, #9
+            'km_after' :       None, #10
+            'distance' :       None  #11
         }
 
         self.entry_texts_right = {
@@ -358,12 +362,12 @@ class main_window():
 
             text = self.entry_texts_right[name]
 
-            entry = tkinter.Entry(self.root, background='black', foreground='orange', font=('Arial', 20), insertbackground='orange')
+            entry = tkinter.Entry(self.root, background='black', foreground='orange', font=('Arial', 16), insertbackground='orange')
 
             if i < 4:
-                entry.place(x=self.screen_width * 0.65, y=self.screen_height * 0.84 + 2 + i*self.screen_height*0.025, width= self.screen_width * 0.25, anchor=tkinter.E)
+                entry.place(x=self.screen_width * 0.65, y=self.screen_height * 0.84 + i*self.screen_height*0.025, width= self.screen_width * 0.25, anchor=tkinter.E)
             else:
-                entry.place(x=self.screen_width * 0.65, y=self.screen_height * 0.84 + 2 + (i - 4)*self.screen_height*0.025, width= self.screen_width * 0.25, anchor=tkinter.W)
+                entry.place(x=self.screen_width * 0.65, y=self.screen_height * 0.84 + (i - 4)*self.screen_height*0.025, width= self.screen_width * 0.25, anchor=tkinter.W)
 
             entry.insert(0, text)
 
@@ -487,7 +491,7 @@ class main_window():
 
                 for i in range(len(self.entry_names_right)):
 
-                    response = self.entry_modify_right.get()
+                    response = self.entry_modify_right[i].get()
 
                     name = self.entry_names_right[i]
 
@@ -503,8 +507,16 @@ class main_window():
                     self.entry_add_right[name] = response
                 
                 self.entry_add_right['vehicle_id'] = self.vehicle_id_current
+                self.entry_add_right['id'] = self.button_trips_modify_id
 
-                self.model.modify_trip()
+                self.model.modify_trip(self.entry_add_right)
+                
+                self.initialize_trips(None, self.entry_add_right['vehicle_id'])
+                
+                for widget in self.modify_window.winfo_children():
+                    widget.destroy()
+                
+                self.modify_window.destroy()
         
         return 1
 
