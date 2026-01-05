@@ -44,13 +44,24 @@ class main_window():
             background='black',
             highlightbackground='orange'
         )
+        
+        if self.screen_width == 2560 and self.screen_height == 1440:
 
-        self.canvas_left.place(
-            x=0,
-            y=0,
-            width=self.screen_width * 0.3,
-            height=self.screen_height * 0.747        ## fix
-         )
+            self.canvas_left.place(
+                x=0,
+                y=0,
+                width=self.screen_width * 0.3,
+                height=self.screen_height * 0.8)        ## fix
+            
+        else:
+
+            self.canvas_left.place(
+                x=0,
+                y=0,
+                width=self.screen_width * 0.3,
+                height=self.screen_height * 0.747)
+        
+        
         
     def initialize_canvas_right(self):
 
@@ -148,6 +159,9 @@ class main_window():
         }
 
         self.entry_names_left = ['name', 'type', 'vin', 'licence_plate', 'date', 'km_start']
+        
+        print(self.screen_height)
+        print(self.screen_width)
 
         for i in range(len(self.entry_names_left)):
 
@@ -157,10 +171,19 @@ class main_window():
 
             entry = tkinter.Entry(self.root, background='black', foreground='orange', font=('Arial', 16), insertbackground='orange')
 
-            if i < 4:
-                entry.place(x=2, y=self.screen_height * 0.75 + i*self.screen_height*0.03, width= self.screen_width * 0.2975) #fix
+            if self.screen_width == 2560 and self.screen_height == 1440:
+
+                if i < 4:
+                    entry.place(x=2, y=self.screen_height * 0.8 + 2 + i*self.screen_height*0.024, width= self.screen_width * 0.3 - 2)
+                else:
+                    entry.place(x=2, y=self.screen_height * 0.8 + 2 + i*self.screen_height*0.024, width= self.screen_width * 0.25)
+
             else:
-                entry.place(x=2, y=self.screen_height * 0.75 + i*self.screen_height*0.03, width= self.screen_width * 0.25) #fix
+
+                if i < 4:
+                    entry.place(x=2, y=self.screen_height * 0.75 + i*self.screen_height*0.03, width= self.screen_width * 0.2975) #fix
+                else:
+                    entry.place(x=2, y=self.screen_height * 0.75 + i*self.screen_height*0.03, width= self.screen_width * 0.25) #fix
 
             entry.insert(0, text)
 
@@ -174,11 +197,21 @@ class main_window():
     def initialize_button_add_left(self):
 
         self.button_add_vehicle = tkinter.Button(background='green', text='Pridaj', font=('Arial', 20), foreground='black')
-        self.button_add_vehicle.place(
-            x=self.screen_width * 0.25 + 2, 
-            y=self.screen_height * 0.75 + self.screen_height * 0.03 * 4 ,  
-            width=int(self.screen_width * 0.048), 
-            height=int(self.screen_height*0.056))
+
+        if self.screen_width == 2560 and self.screen_height == 1440:
+            self.button_add_vehicle.place(
+                x=self.screen_width * 0.25, 
+                y=self.screen_height * 0.8 + self.screen_height * 0.0242 * 4 ,  
+                width=int(self.screen_width * 0.05), 
+                height=int(self.screen_height*0.045))
+            
+        else:
+            self.button_add_vehicle.place(
+                x=self.screen_width * 0.25 + 2, 
+                y=self.screen_height * 0.75 + self.screen_height * 0.03 * 4 ,  
+                width=int(self.screen_width * 0.048), 
+                height=int(self.screen_height*0.056))
+
         self.button_add_vehicle.bind('<ButtonRelease-1>', self.button_release)
 
         return 1
@@ -378,30 +411,6 @@ class main_window():
         
         return 1
     
-    # def initialize_entry_cycle(self, entry_names, entry_texts):
-
-    #     for i in range(len(entry_names)):
-
-    #         name = entry_names[i]
-
-    #         text = entry_texts[name]
-
-    #         entry = tkinter.Entry(self.root, background='black', foreground='orange', font=('Arial', 20), insertbackground='orange')
-
-    #         if i < 4:
-    #             entry.place(x=self.screen_width * 0.65, y=self.screen_height * 0.84 + 2 + i*self.screen_height*0.025, width= self.screen_width * 0.25, anchor=tkinter.E)
-    #         else:
-    #             entry.place(x=self.screen_width * 0.65, y=self.screen_height * 0.84 + 2 + (i - 4)*self.screen_height*0.025, width= self.screen_width * 0.25, anchor=tkinter.W)
-
-    #         entry.insert(0, text)
-
-    #         entry.bind('<FocusIn>', self.entry_focus_in)
-    #         entry.bind('<FocusOut>', self.entry_focus_out)
-
-    #         self.entry_right.append(entry)
-
-    #     return 1
-    
     def initialize_button_add_right(self):
 
         self.button_add_trip = tkinter.Button(background='green', text='Pridaj', font=('Arial', 20), foreground='black')
@@ -409,7 +418,7 @@ class main_window():
             x=self.screen_width * 0.91, 
             y=self.screen_height * 0.815 + 2.63*self.screen_height*0.025,  
             width=int(self.screen_width * 0.05 - 2), 
-            height=int(self.screen_height*0.05) - 2)
+            height=int(self.screen_height*0.045) )
         self.button_add_trip.bind('<ButtonRelease-1>', self.button_release)
 
 
