@@ -2,8 +2,6 @@ import model
 import view
 import tkinter
 
-import os # delete
-
 if __name__ == "__main__":
 
     root = tkinter.Tk()
@@ -19,7 +17,4 @@ if __name__ == "__main__":
     try:
         root.mainloop()
     finally:
-
-        print("Databáza je uložená tu:", os.path.abspath('vehicles.db')) # delete
-
         main_model.exit()

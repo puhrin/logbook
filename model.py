@@ -45,12 +45,6 @@ class main_logic():
                             """)
         
         
-        # self.cursor.execute("""
-        #                     CREATE TABLE IF NOT EXISTS expenses
-        #                     id INTEGER PRIMARY KEY AUTOINCREMENT
-        #                     """)
-        
-        
         self.connect.commit()
         
 
@@ -129,26 +123,32 @@ class main_logic():
 
         return self.cursor.fetchall()
     
-    def load_trips(self, vehicle_id, selected_month):
+    def load_trips(self, vehicle_id, selected_month, id):
 
-        if selected_month == 0:
-            self.cursor.execute("""
-                            SELECT * FROM trips 
-                            WHERE vehicle_id = ? 
-                            ORDER BY id DESC""", 
-                            (vehicle_id,))
+        query = """
+                SELECT * FROM trips 
+                WHERE vehicle_id = ?
+                """
         
-        else:
+        params = [vehicle_id]
+        
+        if selected_month != 0:
             option0 = '%.' + str(selected_month) + '.%'
             option1 = '%.0' + str(selected_month) + '.%'
 
-            self.cursor.execute("""
-                                SELECT * FROM trips 
-                                WHERE vehicle_id = ? 
-                                AND (date LIKE ? OR date LIKE ?)
-                                ORDER BY id DESC
-                                """, 
-                                (vehicle_id, option0, option1))
+            query += ' AND (date LIKE ? OR date LIKE ?)'
+
+            params.append(option0)
+            params.append(option1)
+
+        if id != None:
+             query += ' AND id = ?'
+
+             params.append(id)
+            
+        query += ' ORDER BY id DESC'
+            
+        self.cursor.execute(query, params)
         
         return self.cursor.fetchall()
     
@@ -180,21 +180,6 @@ class main_logic():
         
         data = self.cursor.fetchone()
         
-        # if data == None:
-
-        #     query = """
-        #             SELECT * FROM vehicles
-        #             WHERE id = ?
-        #             """
-
-        #     self.cursor.execute(query, (dictionary['vehicle_id'],))
-        #     last_trip = self.cursor.fetchone()
-
-        #     km_before = last_trip[6] # km_start
-            
-        #     id = 1
-        
-        #else:
         km_after = data[9] + int(dictionary['distance'])
         
         self.cursor.execute("""

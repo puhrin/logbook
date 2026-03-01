@@ -1,5 +1,8 @@
 import tkinter
 import datetime
+import os   
+import sys
+
 from tkinter import ttk
 
 class main_window():
@@ -77,9 +80,13 @@ class main_window():
             width=self.screen_width,
             height=self.screen_height * 0.8
          )
-        
-        self.img = tkinter.PhotoImage(file='assets.png')
 
+        #path = os.path.join(sys._MEIPASS, 'assets.png') #fix
+
+        path = 'assets.png'
+
+        #self.img = tkinter.PhotoImage(file=path)
+        
         self.scrollbar = tkinter.Scrollbar(self.root, orient='vertical', command=self.canvas_right.yview)
         self.scrollbar.place(x=self.screen_width*0.988, y=0, width=self.screen_width*0.012, height=self.screen_height*0.798)
 
@@ -96,8 +103,8 @@ class main_window():
 
         self.canvas_right_window = self.canvas_right.create_window(self.screen_width*0.001,0, width=self.screen_width*0.6866, anchor='nw', window=self.button_trips_frame)
 
-        self.canvas_right.create_image(self.screen_width*0.05,0, image=self.img, anchor='nw')
-
+        self.canvas_right.create_image(self.screen_width*0.05,0, anchor='nw') #image=self.img
+ 
 
         return 1
     
@@ -159,9 +166,6 @@ class main_window():
         }
 
         self.entry_names_left = ['name', 'type', 'vin', 'licence_plate', 'date', 'km_start']
-        
-        print(self.screen_height)
-        print(self.screen_width)
 
         for i in range(len(self.entry_names_left)):
 
@@ -239,9 +243,14 @@ class main_window():
             line1 = f"{str(id):<{4}}{str(name):<{20}}{str(type):<{20}}{str(licence_plate)}"
             line2 = f"{' ':<{4}}{str(vin):<{20}}{str(date):<{20}}{str(km_start) + ' km'}"
 
+            if self.vehicle_id_current == id:
+                background = '#9cf68c'
+            else:
+                background = 'white'
+
             button = tkinter.Button(
                 text= line1 + '\n' + line2, 
-                background='blue', 
+                background=background, 
                 font=('Consolas', 16), 
                 anchor=tkinter.W,
                 justify=tkinter.LEFT 
@@ -266,7 +275,7 @@ class main_window():
 
         selected_month = self.dropdown_month_options.index(self.dropdown_month.get())
 
-        trips = self.model.load_trips(vehicle_id, selected_month)
+        trips = self.model.load_trips(vehicle_id, selected_month, None)
 
         self.initialize_canvas_right_background()
         self.button_trips = []
@@ -297,7 +306,7 @@ class main_window():
             button = tkinter.Button(
                 self.button_trips_frame,
                 text= line1 + '\n' + line2, 
-                background='purple', 
+                background='white', 
                 font=('Consolas', 16), 
                 anchor=tkinter.W,
                 justify=tkinter.LEFT 
@@ -316,6 +325,8 @@ class main_window():
         self.button_trips_frame.update_idletasks()
         self.canvas_right.configure(scrollregion=self.canvas_right.bbox('all'))
 
+        self.initialize_vehicles()
+
 
         return 1
     
@@ -326,18 +337,32 @@ class main_window():
         self.button_trips_modify_id = event.widget.id
 
         self.modify_window = tkinter.Toplevel(self.root)
+
+        trip = self.model.load_trips(self.vehicle_id_current, 0, self.button_trips_modify_id)
+
+        trips = trip[0]
+
+        modify_values = {
+        'driver_name'     : trips[2],
+        'purpose'         : trips[6],
+        'location_start'  : trips[7],
+        'location_end'    : trips[8],
+        'date'            : trips[3],
+        'distance'        : trips[11],
+        'time_start'      : trips[4],
+        'time_end'        : trips[5]
+        }
         
 
         for i in range(len(self.entry_names_right)):
 
-            name = self.entry_names_right[i]
 
-            text = self.entry_texts_right[name]
+            name = self.entry_names_right[i] 
+
+            text = modify_values[name]
 
             entry = tkinter.Entry(self.modify_window, background='black', foreground='orange', font=('Arial', 20), insertbackground='orange')
             
-            
-
             entry.pack()
 
             entry.insert(0, text)
