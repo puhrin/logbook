@@ -229,8 +229,7 @@ class main_logic():
             else:
                     km_before = km_after
                     km_after = km_before + row[11]
-                
-                
+                      
             self.cursor.execute("""
                                     UPDATE trips
                                     SET
@@ -241,12 +240,45 @@ class main_logic():
                                     """,
                                     ( km_before, km_after, vehicle_id, id ))
                        
-            
-            
-            
         self.connect.commit()
 
         return 
+    
+    # def copy_trip(self, dictionary):
+
+    #     vehicle_id, id, selected_month = dictionary['vehicle_id'], dictionary['id'], dictionary['selected_month']
+
+    #     query = """
+    #             SELECT * FROM trips 
+    #             WHERE vehicle_id = ?
+    #             """
+
+    #     params = [vehicle_id]
+
+    #     if selected_month != 0:
+    #         option0 = '%.' + str(selected_month) + '.%'
+    #         option1 = '%.0' + str(selected_month) + '.%'
+
+    #         query += ' AND (date LIKE ? OR date LIKE ?)'
+
+    #         params.append(option0)
+    #         params.append(option1)
+        
+    #     if id != None:
+    #          query += ' AND id = ?'
+
+    #          params.append(id)
+
+    #     query += ' ORDER BY id DESC'
+            
+    #     self.cursor.execute(query, params)
+        
+    #     return self.cursor.fetchall()
+
+        
+
+         
+    #     return
     
     def exit(self):
 

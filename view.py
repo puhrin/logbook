@@ -31,6 +31,7 @@ class main_window():
         self.initialize_entry_right()
         self.initialize_trips(None, 1)
         self.initialize_button_add_right()
+        # self.initialize_button_copy_right()
 
         return
     
@@ -39,6 +40,7 @@ class main_window():
         self.vehicle_id_current = None
         self.button_vehicles = []
         self.button_trips = []
+        self.button_modify_trip = None
 
     def initialize_canvas_left(self):
 
@@ -81,11 +83,11 @@ class main_window():
             height=self.screen_height * 0.8
          )
 
-        #path = os.path.join(sys._MEIPASS, 'assets.png') #fix
+        path = os.path.join(sys._MEIPASS, 'assets.png') #fix
 
         path = 'assets.png'
 
-        #self.img = tkinter.PhotoImage(file=path)
+        self.img = tkinter.PhotoImage(file=path)
         
         self.scrollbar = tkinter.Scrollbar(self.root, orient='vertical', command=self.canvas_right.yview)
         self.scrollbar.place(x=self.screen_width*0.988, y=0, width=self.screen_width*0.012, height=self.screen_height*0.798)
@@ -131,7 +133,7 @@ class main_window():
 
         self.dropdown_month = ttk.Combobox(self.root, values=self.dropdown_month_options, state='readonly', font=("Consolas", 16))
 
-        self.dropdown_month.place(x=self.screen_width * 0.32, y=self.screen_height * 0.815 + 2, width= self.screen_width * 0.05, anchor=tkinter.W)
+        self.dropdown_month.place(x=self.screen_width * 0.40, y=self.screen_height * 0.815 + 2, width= self.screen_width * 0.05, anchor=tkinter.W)
 
         self.dropdown_month.set(self.dropdown_month_options[self.dropdown_month_now])
 
@@ -371,10 +373,29 @@ class main_window():
             entry.bind('<FocusOut>', self.entry_focus_out)
 
             self.entry_modify_right.append(entry)
-        
-        self.button_modify_trip = tkinter.Button(self.modify_window, background='green', text='Uprav', font=('Arial', 20), foreground='black')
+
+        button_container = tkinter.Frame(self.modify_window)
+        button_container.pack(side='bottom', fill='x')
+
+        self.button_modify_trip = tkinter.Button(
+            button_container, 
+            background='green', 
+            text='Uprav', 
+            font=('Arial', 20), 
+            foreground='black'
+        )
         self.button_modify_trip.bind('<ButtonRelease-1>', self.button_release)
-        self.button_modify_trip.pack(fill='x')
+        self.button_modify_trip.pack(side='left', fill='both', expand=True)
+
+        self.button_copy_trip = tkinter.Button(
+            button_container, 
+            background='orange', 
+            text='Kopíruj', 
+            font=('Arial', 20), 
+            foreground='black'
+        )
+        self.button_copy_trip.bind('<ButtonRelease-1>', self.button_release)
+        self.button_copy_trip.pack(side='left', fill='both', expand=True)
 
         return 1
     
@@ -433,6 +454,14 @@ class main_window():
             entry.bind('<FocusOut>', self.entry_focus_out)
 
             self.entry_right.append(entry)
+
+        # self.entry_copy = tkinter.Entry(self.root, background='black', foreground='orange', font=('Arial', 16), insertbackground='orange')
+        # self.entry_copy.place(
+        #     x=self.screen_width * 0.98, 
+        #     y=self.screen_height * 0.84, 
+        #     width= self.screen_width * 0.015, 
+        #     anchor=tkinter.E)
+
         
         return 1
     
@@ -446,7 +475,15 @@ class main_window():
             height=int(self.screen_height*0.045) )
         self.button_add_trip.bind('<ButtonRelease-1>', self.button_release)
 
+    # def initialize_button_copy_right(self):
 
+    #     self.button_copy_trip = tkinter.Button(background='green', text='Kopíruj', font=('Arial', 20), foreground='black')
+    #     self.button_copy_trip.place(
+    #         x=self.screen_width * 0.91, 
+    #         y=self.screen_height * 0.815 - self.screen_height*0.050 + 2.63 *self.screen_height* 0.025,  
+    #         width=int(self.screen_width * 0.05 - 2), 
+    #         height=int(self.screen_height*0.045) )
+    #     self.button_copy_trip.bind('<ButtonRelease-1>', self.button_release)
 
     def button_release(self, event):
 
@@ -551,8 +588,39 @@ class main_window():
                     widget.destroy()
                 
                 self.modify_window.destroy()
-        
-        return 1
+    
+        elif event.widget == self.button_copy_trip: 
+
+            for i in range(len(self.entry_names_right)):
+
+                response = self.entry_modify_right[i].get()
+
+                name = self.entry_names_right[i]
+
+                if response == '' or response in self.entry_texts_right.values():
+                    return 0
+                    
+                if name == 'distance':
+                    try:
+                        response = int(response)
+                    except ValueError:
+                        return 0
+                    
+                self.entry_add_right[name] = response
+                
+            self.entry_add_right['vehicle_id'] = self.vehicle_id_current
+            self.entry_add_right['id'] = self.button_trips_modify_id
+
+            self.model.add_trip(self.entry_add_right)
+                
+            self.initialize_trips(None, self.entry_add_right['vehicle_id'])
+                
+            for widget in self.modify_window.winfo_children():
+                widget.destroy()
+                
+            self.modify_window.destroy()
+
+            return
 
 
     def entry_focus_in(self, event):
